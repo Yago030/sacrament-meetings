@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-6 text-center text-sm text-muted">
         <p>© 2026 Springfield Ward</p>
 
-        <p>Sacrament Meeting Planner</p>
+        <p>Sacrament Meeting Planner by Santiago Bergerat</p>
       </div>
     </footer>
   );
