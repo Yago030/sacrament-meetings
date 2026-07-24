@@ -84,8 +84,7 @@ export async function getMeetings(
     ? `WHERE ${conditions.join(" AND ")}`
     : "";
 
-  // No `page` means an unpaginated caller (e.g. the /api/meetings route) —
-  // return every matching row instead of truncating to PAGE_SIZE.
+ 
   if (page === undefined) {
     const rows = (await sql.query(
       `SELECT ${SELECT_COLUMNS} FROM meetings ${whereClause} ORDER BY date ASC`,
