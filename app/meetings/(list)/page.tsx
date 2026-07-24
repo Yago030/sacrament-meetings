@@ -1,15 +1,8 @@
-import { headers } from "next/headers";
 import MeetingCard from "@/components/MeetingCard";
+import { getBaseUrl } from "@/lib/get-base-url";
 import type { SacramentMeeting } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
-
-async function getBaseUrl() {
-  const headersList = await headers();
-  const host = headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") ?? "http";
-  return `${protocol}://${host}`;
-}
 
 export default async function MeetingsPage() {
   const baseUrl = await getBaseUrl();
