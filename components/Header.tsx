@@ -12,9 +12,9 @@ export default function Header() {
     <header className="border-b border-border bg-card shadow-sm">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-primary">
+          <p className="text-2xl font-bold text-primary">
             Springfield Ward
-          </h1>
+          </p>
 
           <p className="text-sm text-muted">
             Sacrament Meeting Planner
