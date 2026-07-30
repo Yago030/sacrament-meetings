@@ -16,6 +16,10 @@ const links = [
     href: "/meetings/current",
     label: "Current Meeting",
   },
+  {
+    href: "/meetings/new",
+    label: "New Meeting",
+  },
 ];
 
 export default function NavLinks() {

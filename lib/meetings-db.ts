@@ -1,5 +1,5 @@
 import { neon } from "@neondatabase/serverless";
-import type { SacramentMeeting } from "./types";
+import type { MeetingInput, SacramentMeeting } from "./types";
 
 const sql = neon(process.env.DATABASE_URL!);
 
@@ -142,14 +142,55 @@ export async function getCurrentMeeting(): Promise<SacramentMeeting | null> {
   return rows[0] ? mapRow(rows[0]) : null;
 }
 
-export async function addMeeting(): Promise<SacramentMeeting> {
-  throw new Error("addMeeting is not implemented yet — coming in Week 04.");
+function toValues(input: MeetingInput): unknown[] {
+  return [
+    input.date,
+    input.meetingType,
+    input.presiding,
+    input.conducting,
+    input.announcements ?? [],
+    JSON.stringify(input.openingHymn),
+    input.openingPrayer,
+    JSON.stringify(input.wardBusiness),
+    input.stakeBusiness,
+    JSON.stringify(input.sacramentHymn),
+    JSON.stringify(input.speakers),
+    JSON.stringify(input.closingHymn),
+    input.closingPrayer,
+  ];
 }
 
-export async function updateMeeting(): Promise<SacramentMeeting> {
-  throw new Error("updateMeeting is not implemented yet — coming in Week 04.");
+export async function addMeeting(input: MeetingInput): Promise<SacramentMeeting> {
+  const rows = (await sql.query(
+    `INSERT INTO meetings (
+       date, meeting_type, presiding, conducting, announcements,
+       opening_hymn, opening_prayer, ward_business, stake_business,
+       sacrament_hymn, speakers, closing_hymn, closing_prayer
+     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+     RETURNING ${SELECT_COLUMNS}`,
+    toValues(input)
+  )) as MeetingRow[];
+
+  return mapRow(rows[0]);
 }
 
-export async function deleteMeeting(): Promise<void> {
-  throw new Error("deleteMeeting is not implemented yet — coming in Week 04.");
+export async function updateMeeting(
+  id: number,
+  input: MeetingInput
+): Promise<SacramentMeeting | null> {
+  const rows = (await sql.query(
+    `UPDATE meetings SET
+       date = $1, meeting_type = $2, presiding = $3, conducting = $4, announcements = $5,
+       opening_hymn = $6, opening_prayer = $7, ward_business = $8, stake_business = $9,
+       sacrament_hymn = $10, speakers = $11, closing_hymn = $12, closing_prayer = $13
+     WHERE id = $14
+     RETURNING ${SELECT_COLUMNS}`,
+    [...toValues(input), id]
+  )) as MeetingRow[];
+
+  return rows[0] ? mapRow(rows[0]) : null;
+}
+
+export async function deleteMeeting(id: number): Promise<void> {
+  await sql.query(`DELETE FROM meetings WHERE id = $1`, [id]);
 }

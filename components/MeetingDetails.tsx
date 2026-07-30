@@ -1,3 +1,5 @@
+import Link from "next/link";
+import DeleteMeetingForm from "@/components/DeleteMeetingForm";
 import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingDetailProps {
@@ -27,6 +29,20 @@ export default function MeetingDetail({
         <p className="mt-2 text-muted">
           {formattedDate}
         </p>
+
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Link
+            href={`/meetings/${meeting.id}/edit`}
+            className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+          >
+            Edit Meeting
+          </Link>
+
+          <DeleteMeetingForm
+            id={meeting.id}
+            meetingLabel={`${formattedDate} ${meeting.meetingType}`}
+          />
+        </div>
       </header>
 
       <section className="space-y-3">
