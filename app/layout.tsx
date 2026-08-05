@@ -15,9 +15,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Sacrament Meeting Planner",
-  description: "Plan and manage sacrament meetings.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Sacrament Meeting Planner",
+    template: "%s | Sacrament Meeting Planner",
+  },
+  description:
+    "Plan, schedule, and manage sacrament meetings for the Springfield Ward.",
+  openGraph: {
+    title: "Sacrament Meeting Planner",
+    description:
+      "Plan, schedule, and manage sacrament meetings for the Springfield Ward.",
+    type: "website",
+    images: [
+      {
+        url: "/images/og.jpg",
+        width: 1200,
+        height: 600,
+        alt: "Sacrament Meeting Planner",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

@@ -4,10 +4,12 @@ import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingDetailProps {
   meeting: SacramentMeeting;
+  isAdmin?: boolean;
 }
 
 export default function MeetingDetail({
   meeting,
+  isAdmin = false,
 }: MeetingDetailProps) {
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -30,19 +32,21 @@ export default function MeetingDetail({
           {formattedDate}
         </p>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Link
-            href={`/meetings/${meeting.id}/edit`}
-            className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
-          >
-            Edit Meeting
-          </Link>
+        {isAdmin && (
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <Link
+              href={`/meetings/${meeting.id}/edit`}
+              className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              Edit Meeting
+            </Link>
 
-          <DeleteMeetingForm
-            id={meeting.id}
-            meetingLabel={`${formattedDate} ${meeting.meetingType}`}
-          />
-        </div>
+            <DeleteMeetingForm
+              id={meeting.id}
+              meetingLabel={`${formattedDate} ${meeting.meetingType}`}
+            />
+          </div>
+        )}
       </header>
 
       <section className="space-y-3">

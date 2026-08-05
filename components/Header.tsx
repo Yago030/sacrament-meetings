@@ -1,12 +1,17 @@
+import Link from "next/link";
 import NavLinks from "./NavLinks";
+import SignOutButton from "./SignOutButton";
+import { getOptionalSession } from "@/lib/dal";
 
-export default function Header() {
+export default async function Header() {
   const currentDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   }).format(new Date());
+
+  const session = await getOptionalSession();
 
   return (
     <header className="border-b border-border bg-card shadow-sm">
@@ -25,7 +30,17 @@ export default function Header() {
           </p>
         </div>
 
-        <NavLinks />
+        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+          <NavLinks />
+          {session ? <SignOutButton /> : (
+            <Link
+              href="/login"
+              className="rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Bishopric Sign In
+            </Link>
+          )}
+        </div>
       </div>
     </header>
   );

@@ -8,6 +8,7 @@ import {
   deleteMeeting as deleteMeetingInDb,
   updateMeeting as updateMeetingInDb,
 } from "./meetings-db";
+import { verifySession } from "./dal";
 import type { MeetingInput } from "./types";
 
 const meetingTypeValues = ["testimony", "regular", "stake", "general"] as const;
@@ -127,6 +128,8 @@ export async function createMeeting(
   _prevState: MeetingFormState,
   formData: FormData
 ): Promise<MeetingFormState> {
+  await verifySession();
+
   const validated = MeetingFormSchema.safeParse(parseMeetingFormData(formData));
 
   if (!validated.success) {
@@ -159,6 +162,8 @@ export async function updateMeeting(
   _prevState: MeetingFormState,
   formData: FormData
 ): Promise<MeetingFormState> {
+  await verifySession();
+
   const validated = MeetingFormSchema.safeParse(parseMeetingFormData(formData));
 
   if (!validated.success) {
@@ -194,6 +199,8 @@ export async function updateMeeting(
 }
 
 export async function deleteMeeting(formData: FormData): Promise<void> {
+  await verifySession();
+
   const id = Number(formData.get("id"));
 
   if (!Number.isInteger(id)) {

@@ -4,9 +4,10 @@ import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingCardProps {
   meeting: SacramentMeeting;
+  isAdmin?: boolean;
 }
 
-export default function MeetingCard({ meeting }: MeetingCardProps) {
+export default function MeetingCard({ meeting, isAdmin = false }: MeetingCardProps) {
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
     month: "long",
@@ -50,17 +51,21 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
           View Meeting →
         </Link>
 
-        <Link
-          href={`/meetings/${meeting.id}/edit`}
-          className="inline-block rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
-        >
-          Edit
-        </Link>
+        {isAdmin && (
+          <>
+            <Link
+              href={`/meetings/${meeting.id}/edit`}
+              className="inline-block rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              Edit
+            </Link>
 
-        <DeleteMeetingForm
-          id={meeting.id}
-          meetingLabel={`${formattedDate} ${meeting.meetingType}`}
-        />
+            <DeleteMeetingForm
+              id={meeting.id}
+              meetingLabel={`${formattedDate} ${meeting.meetingType}`}
+            />
+          </>
+        )}
       </div>
     </article>
   );
